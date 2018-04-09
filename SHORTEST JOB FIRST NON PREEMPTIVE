@@ -1,0 +1,119 @@
+#include<stdio.h>
+int burst[50];
+int process[50];
+int arrival[50];
+int priority[50];
+int maximum(int size,int p[])
+{
+    int maxm;
+	maxm=p[0];
+    int j=0;
+    for(int i=1;i<size;i++)
+        {
+            if(p[i]>maxm)
+            {
+                maxm=p[i];
+                j=i;
+            }
+        }
+    return j;
+}
+int wait(int a)
+{ 
+    int i=0;
+    for(int j=0;a<i;j++)
+    {
+        i=i+burst[j];
+    }
+    return i;    
+}
+main()
+{  
+    int i;
+	int j;
+	int numb;
+	int postn;
+	int temp;
+	int  sum;
+	float avg_turn_time;
+    float avg_wait_time;
+	sum=0;
+	int a;
+	a=0;
+    printf("Please enter the total number of processes that you want to enter:\t");
+    scanf("%d", &numb);
+    printf("\nPleaes enter Burst Time:");
+    for(int i=0;i<numb;i++)
+    {
+          printf("\nProcess number [%d]\n",i);
+          printf("pleasse enter the Process Burst Time:\t");
+          scanf("%d", &burst[i]);
+          process[i] = i;
+    }
+    printf("\nEnter the Arrival Time: \n");
+    for(int i=0;i<numb;i++)
+    {
+      	printf("\nProcess number %d\n",i);
+        printf("Enter the Arrival Time: \t");
+        scanf("%d", &arrival[i]);
+        process[i] = i;
+    }
+     for(int i=0; i<numb; i++)
+	 {
+        for(int j=i+1; j<numb; j++)
+		{
+            if(arrival[i]>arrival[j])
+			{
+                            temp=burst[i];
+                            burst[i]=burst[j];
+                            burst[j]=temp;
+
+                            temp=process[i];
+                            process[i]=process[j];
+                            process[j]=temp;
+                            
+                            temp=arrival[i];
+                            arrival[i]=arrival[j];
+                            arrival[j]=temp;
+            }
+        }
+     }  
+for(int i=0;i<numb;i++)
+{
+    int k[50];
+    if(i==0)
+	{
+    a=a+burst[i];
+    printf("\n Process is %d with brust time %d with time%d  \n",process[i],burst[i],a);
+    }
+    else
+	{
+    for(int j=i;j<numb;j++)
+	{
+        if(arrival[j]<a)
+		{
+        int u;
+		u=wait(i);
+        k[j]=1+((u-arrival[j])/burst[j]);//the actual algorithm/formula is used here
+        }
+	}
+    int b=maximum(k,50);
+            if(b!=i)
+			{
+                temp=arrival[i];
+                arrival[i]=arrival[b];
+                arrival[b]=temp;
+                temp=burst[i];
+                burst[i]=burst[b];
+                burst[b]=temp;
+                temp=process[i];
+                process[i]=process[b];
+                process[b]=temp;
+            }
+            a=a+burst[i];
+            printf("\n The Process is: %d",process[i]);
+			printf("\n The process brust time is: %d",burst[i]);
+			printf("\n The Process ends with time: %d",a);
+            }
+    }
+ }
